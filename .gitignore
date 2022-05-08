@@ -14,21 +14,18 @@ bin-release/
 *.apk
 
 # Mobile Tools for Java (J2ME)
-  .mtj.tmp/
-  .logs/*
-  **/*.iml
+.mtj.tmp/
+.logs/*
+**/*.iml
 # Package Files #
-  *.jar
-  *.war
-  *.ear
-  target
+*.jar
+*.war
+*.ear
+target
 out/
-  .idea
-  .DS_Store
-  exports
-
-  hs_err_pid*
-  .tags
-  .tags_sorted_by_file
-
-LICENSE
+.idea
+.DS_Store
+exports
+hs_err_pid*
+.tags
+.tags_sorted_by_file

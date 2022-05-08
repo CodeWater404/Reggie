@@ -44,7 +44,9 @@
               text-color="#bfcbd9"
               active-text-color="#f4f4f5"
             >
+<!--              menuList是下面vue创建的； 而item可以随便起，只要报下面的同样变化即可-->
               <div v-for="item in menuList" :key="item.id">
+<!--                v-if 是一个判断的条件，menuList中并无孩子，所以下面这个if不会成立；直接看下面的v-else即可-->
                 <el-submenu :index="item.id" v-if="item.children && item.children.length>0">
                   <template slot="title">
                     <i class="iconfont" :class="item.icon"></i>
@@ -61,8 +63,14 @@
                     </el-menu-item
                   >
                 </el-submenu>
+                <!--这里展示的登录页面之后左侧的菜单栏：员工管理、分类管理、菜品管理。。。。-->
+<!--    @click一个点击事件，点击左侧菜单栏中一个选项右侧的页面也就会发生相应的变化            -->
+<!--                menuHandle是下面定义好的一个方法（204行左右）-->
                 <el-menu-item v-else :index="item.id" @click="menuHandle(item,false)">
+<!--                  改变item。icon是改变名字前面的图标-->
                   <i class="iconfont" :class="item.icon"></i>
+<!--                  改变item.name就可以换一个属性值展示-->
+<!--      例如展示 id           <span slot="title">{{item.id}}</span>-->
                   <span slot="title">{{item.name}}</span>
                 </el-menu-item>
               </div>
@@ -86,6 +94,7 @@
           </div>
           <div class="app-main" v-loading="loading">
             <div class="divTmp" v-show="loading"></div>
+<!--       展示右侧数据的一个页面标签，:src会用下面vue中iframeUrl    -->
             <iframe
               id="cIframe"
               class="c_iframe"
@@ -155,6 +164,7 @@
               //   ],
               // },
             ],
+            //定义一个右侧显示页面的，上面有iframe标签会用到，这里给一个初始值，也解释一登录的时候展示员工
             iframeUrl: 'page/member/list.html',
             headTitle: '员工管理',
             goBackFlag: false,
@@ -196,6 +206,8 @@
           menuHandle(item, goBackFlag) {
             this.loading = true
             this.menuActived = item.id
+            //这里的url对应的是上面menuList（128行左右）中的url； iframeUrl在上面定义了
+            //点击左侧的菜单的时候，实际也就是在这里切换了url
             this.iframeUrl = item.url
             this.headTitle = item.name
             this.goBackFlag = goBackFlag
