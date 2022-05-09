@@ -20,6 +20,7 @@
   <div class="dashboard-container" id="member-app">
     <div class="container">
       <div class="tableBar">
+<!--        点击事件，会发一个请求查出要查的员工-->
         <el-input
           v-model="input"
           placeholder="请输入员工姓名"
@@ -60,6 +61,7 @@
           label="手机号"
         ></el-table-column>
         <el-table-column label="账号状态">
+<!--          这里做的一个状态的映射，因为数据库中存储的是01，这里转成汉字-->
           <template slot-scope="scope">
             {{ String(scope.row.status) === '0' ? '已禁用' : '正常' }}
           </template>
@@ -79,6 +81,9 @@
             >
               编辑
             </el-button>
+<!--    v-if这里判断登录的用户是不是admin是的话，就能看到操作那里的禁用或者启用按钮；如果只是一个普通的用户
+  那就不会看到禁用按钮，只有一个编辑的；
+  这里也绑定了一个点击事件@click="statusHandle(scope.row)" ； statusHandle方法下面也有定义-->
             <el-button
               type="text"
               size="small"
@@ -91,6 +96,8 @@
           </template>
         </el-table-column>
       </el-table>
+<!-- page-sizes对应前台查询下面的下拉框中的值；改变这个和下面vue中的pageSize真实控制的值就可以改变显示的
+数据条目     -->
       <el-pagination
         class="pageList"
         :page-sizes="[10, 20, 30, 40]"
@@ -126,7 +133,9 @@
           }
         },
         computed: {},
+        //vue对象初始化之后就自动调佣created方法了
         created() {
+          //init方法下面定义了
           this.init()
           this.user = JSON.parse(localStorage.getItem('userInfo')).username
         },
@@ -134,11 +143,13 @@
         },
         methods: {
           async init () {
+            //构造一个对象，提交相应的数据和参数给后端，前端需要多少数据展示的
             const params = {
               page: this.page,
               pageSize: this.pageSize,
               name: this.input ? this.input : undefined
             }
+            //getMeemberList封装在一个js文件中
             await getMemberList(params).then(res => {
               if (String(res.code) === '1') {
                 this.tableData = res.data.records || []
@@ -177,6 +188,7 @@
               'cancelButtonText': '取消',
               'type': 'warning'
               }).then(() => {
+              //  !this.status ? 1 : 0 如果用户的账号状态是正常那么就发送0过去（禁用）
               enableOrDisableEmployee({ 'id': this.id, 'status': !this.status ? 1 : 0 }).then(res => {
                 console.log('enableOrDisableEmployee',res)
                 if (String(res.code) === '1') {

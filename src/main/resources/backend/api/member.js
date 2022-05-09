@@ -1,4 +1,5 @@
 function getMemberList (params) {
+  //发送ajax请求：url ， method类型，以及参数
   return $axios({
     url: '/employee/page',
     method: 'get',

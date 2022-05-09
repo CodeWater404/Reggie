@@ -4,13 +4,12 @@ import codewater.reggie.common.R;
 import codewater.reggie.entity.Employee;
 import codewater.reggie.service.EmployeeService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -104,5 +103,52 @@ public class EmployeeController {
         
         return R.success( "新增员工成功" );
         
+    }
+
+    /**
+     * 员工信息查询
+     * @param page
+     * @param pageSize
+     * @param name
+     * @return
+     */
+//    页面上需要page和total这两个数据进行显示。所以返回的泛型是page（mybatisplus提供类）而不是employee
+//    前端发送的参数是page，pageSize，所以参数接收;另外前端进行查询的时候还会提交一个name
+    @GetMapping("/page")
+    public R<Page> page( int page , int pageSize , String name ){
+        log.info( "page={} , pageSize= {} , name = {} " , page , pageSize , name );
+        
+//        构造分页构造器 , 查询第page页、pageSize条数据
+        Page pageInfo = new Page( page , pageSize );
+        
+//        构造条件构造器
+        LambdaQueryWrapper<Employee> queryWrapper = new LambdaQueryWrapper();
+//        添加过滤条件， name不等于空时才执行查询
+        queryWrapper.like( StringUtils.isNotEmpty(name) , Employee::getName , name );
+//        添加排序条件
+        queryWrapper.orderByDesc( Employee::getUpdateTime );
+//        执行查询
+        employeeService.page( pageInfo , queryWrapper );
+//        不需要返回page，因为它内部封装了前端要查询的page和total数据，上面查出之后就行
+        return R.success( pageInfo );
+    }
+
+    /**
+     * 根据id修改员工的信息
+     * @param employee
+     * @RequestBody 是因为前端请求传过来的是一个复杂的数据类型所以需要加这个注解；普通类型不用
+     * @return
+     */
+    @PutMapping
+    public R<String> update(HttpServletRequest request , @RequestBody Employee employee ){
+        log.info( employee.toString() );
+        
+        Long empId = (Long)request.getSession().getAttribute("employee" );
+        employee.setUpdateTime( LocalDateTime.now() );
+        employee.setUpdateUser( empId );
+//        执行更新语句
+        employeeService.updateById( employee );
+        
+        return R.success("员工信息修改成功！");
     }
 }

@@ -16,6 +16,7 @@
     // }
     // get请求映射params参数
     if (config.method === 'get' && config.params) {
+      //这里处理的是前端的参数是一个数组的形式重新整理成一个路径形式
       let url = config.url + '?';
       for (const propName of Object.keys(config.params)) {
         const value = config.params[propName];
