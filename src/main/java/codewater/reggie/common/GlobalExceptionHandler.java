@@ -33,8 +33,16 @@ public class GlobalExceptionHandler {
             return R.error( msg );
         }
         
-        
         return R.error("未知错误");
-        
     }
+
+    //    处理指定的异常:删除分类时，分类关联了菜品和套餐
+    @ExceptionHandler(CustomException.class)
+    public R<String> exceptionHandler( CustomException ex){
+        log.info( ex.getMessage() );
+//返回给客户端页面，让页面显示出来提示信息
+        return R.error( ex.getMessage() );
+    }
+    
+    
 }

@@ -12,7 +12,6 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 
 /**
  * @author ： CodeWater
@@ -89,14 +88,15 @@ public class EmployeeController {
         //设置初始密码123456，需要进行md5加密处理
         employee.setPassword( DigestUtils.md5DigestAsHex( "123456".getBytes() ) );
         
-        employee.setCreateTime( LocalDateTime.now() );
-        employee.setUpdateTime( LocalDateTime.now() );
-        
-//        获得当前登录用户的id
-        long empId = (Long) request.getSession().getAttribute( "employee" );
-        
-        employee.setCreateUser( empId );
-        employee.setUpdateUser( empId );
+// 在Employee类中对于这4个属性已经使用了@TableField自动填充功能，所以这里就不再需要设置了。在MyMeteObjectHandler中具体实现
+//        employee.setCreateTime( LocalDateTime.now() );
+//        employee.setUpdateTime( LocalDateTime.now() );
+//        
+////        获得当前登录用户的id
+//        long empId = (Long) request.getSession().getAttribute( "employee" );
+//        
+//        employee.setCreateUser( empId );
+//        employee.setUpdateUser( empId );
         
 //        mybatis-plus自带的save方法
         employeeService.save( employee );
@@ -142,13 +142,32 @@ public class EmployeeController {
     @PutMapping
     public R<String> update(HttpServletRequest request , @RequestBody Employee employee ){
         log.info( employee.toString() );
+
+// 在Employee类中对于这4个属性已经使用了@TableField自动填充功能，所以这里就不再需要设置了。在MyMeteObjectHandler中具体实现
+//        Long empId = (Long)request.getSession().getAttribute("employee" );
+//        employee.setUpdateTime( LocalDateTime.now() );
+//        employee.setUpdateUser( empId );
         
-        Long empId = (Long)request.getSession().getAttribute("employee" );
-        employee.setUpdateTime( LocalDateTime.now() );
-        employee.setUpdateUser( empId );
-//        执行更新语句
+//        执行更新语句(根据前端返回的数据，上面已经解析成employee了，所以只有updateTime和updateuser改一下)
         employeeService.updateById( employee );
         
         return R.success("员工信息修改成功！");
     }
+
+    /**
+     * 根据id修改员工信息。这里只做了一个查询员工id的工作是因为回显到前端的时候，修改完之后点保存，
+     * 调用的方法是上面的update方法进行了更新。
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}") //获取前端过来的路径中的id参数
+    public R<Employee> getById(@PathVariable Long id ){
+        log.info( "根据id查询员工信息。。。" );
+        Employee employee = employeeService.getById( id );
+        if( id != null ){
+            return R.success( employee );
+        }
+        return R.error( "没有查询到对应员工的信息。。" );
+    }
+    
 }

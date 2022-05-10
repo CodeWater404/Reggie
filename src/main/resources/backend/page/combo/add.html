@@ -451,6 +451,7 @@
           this.getDishTypeList()
           this.getDishType()
           this.id = requestUrlParam('id')
+          //id有值就是修改，没有值就是新增员工。因为这个add.html是一个共用的页面
           this.actionType = this.id ? 'edit' : 'add'
           if (this.id) {
             this.init()
@@ -459,6 +460,7 @@
         mounted() {},
         methods: {
           async init() {
+            //根据id查询 ， querySetmealById是一个接口，调用后端的，查到之后页面回显
             querySetmealById(this.id).then((res) => {
               if (String(res.code) === '1') {
                 this.ruleForm = res.data

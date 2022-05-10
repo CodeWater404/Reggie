@@ -1,5 +1,6 @@
 package codewater.reggie.filter;
 
+import codewater.reggie.common.BaseContext;
 import codewater.reggie.common.R;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,11 @@ public class LoginCheckFilter implements Filter {
 //        4、判断登录状态，如果已登录，则直接放行
         if( request.getSession().getAttribute( "employee" ) != null ){
             log.info( "用户已登录，用户id为{}" , request.getSession().getAttribute( "employee" ) );
+            
+//从当前线程中获取employee的id，从而可以在myMetaObjectHandler中动态设置createUser和UpdateUser的值
+            Long empId = (long) request.getSession().getAttribute( "employee" );
+            BaseContext.setCurrentId( empId ); //导入的是自己写的类，不是jdk中的 
+            
             filterChain.doFilter( request , response );
             return;
         }
