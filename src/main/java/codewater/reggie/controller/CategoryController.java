@@ -75,4 +75,20 @@ public class CategoryController {
         
         return R.success( "分类信息删除成功。。。" );
     }
+    
+    
+
+    /**
+     * 根据id修改分类信息：看前端的发送的请求url，请求方式，以及请求数据（reuqtest payload有效载荷），从而
+     * 写出方法需要什么东西。@RequestBody就是因为前端发送的数据是一个json格式的，所以要加
+     * @param category
+     * @return
+     */
+    @PutMapping
+    public R<String> update( @RequestBody Category category ){
+        log.info( "修改分类信息：{}" , category );
+        
+        categoryService.updateById( category );
+        return R.success( "修改分类信息成功" );
+    }
 }

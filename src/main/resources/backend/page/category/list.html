@@ -105,6 +105,9 @@
         class="demo-form-inline"
         label-width="100px"
       >
+<!--        v-model="classData.name"数据跟classdata进行绑定，下面的方法就是通过修改classdata中的数据，
+从而该干输入框中的数据显示
+-->
         <el-form-item label="分类名称：">
           <el-input
             v-model="classData.name"
@@ -205,8 +208,11 @@
             this.classData.dialogVisible = true
           },
           editHandle(dat) {
+            //展示的是点击修改分类之后弹出来的一个小窗口上面的title
             this.classData.title = '修改分类'
+            //表示改窗口处在编辑中
             this.action = 'edit'
+            //classData在上面data（）定义了
             this.classData.name = dat.name
             this.classData.sort = dat.sort
             this.classData.id = dat.id

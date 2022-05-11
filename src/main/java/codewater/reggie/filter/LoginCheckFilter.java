@@ -33,11 +33,13 @@ public class LoginCheckFilter implements Filter {
         String requestURI = request.getRequestURI();
         log.info( "拦截到请求：{}" , requestURI );
 //        定义一些不需要检查，直接放行的请求
+//        "/common/**"      加这个方便测试文件上传功能，不用登录即可访问页面
         String[] urls = new String[]{
           "/employee/login",
           "/employee/logout",
           "/backend/**",
-          "/front/**"      
+          "/front/**" ,
+          "/common/**"      
         };
 //        2、判断本次请求是否需要处理（检查本次请求是否是登录的）
         boolean check = check( urls , requestURI );
