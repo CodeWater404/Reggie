@@ -20,4 +20,4 @@ mybatis-plus:
       
 # 指定以文件上传的位置
 reggie:
-  path: E:\JavaProject\Reggie\upload
+  path: E:\JavaProject\Reggie\upload\
