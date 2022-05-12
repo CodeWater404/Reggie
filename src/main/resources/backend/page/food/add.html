@@ -389,8 +389,10 @@
 
           // 获取菜品分类
           getDishList () {
+            //type1表示的是菜品的分类；2表示的是套餐分类
             getCategoryList({ 'type': 1 }).then(res => {
               if (res.code === 1) {
+                //dishList对应上页面的下拉框
                 this.dishList = res.data
               } else {
                 this.$message.error(res.msg || '操作失败')

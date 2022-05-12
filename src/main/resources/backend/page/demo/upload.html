@@ -20,6 +20,7 @@
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeUpload"
                 ref="upload">
+<!--            图片只有上传只有才能展示出来，就是上传后再求服务端，把图片下载回来，通过img标签显示-->
             <img v-if="imageUrl" :src="imageUrl" class="avatar"></img>
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
@@ -42,6 +43,7 @@
         },
         methods: {
           handleAvatarSuccess (response, file, fileList) {
+              //response.data拿到上传的图片名称
               this.imageUrl = `/common/download?name=${response.data}`
           },
           beforeUpload (file) {
