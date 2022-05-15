@@ -6,6 +6,15 @@ function loginApi(data) {
     })
   }
 
+//  短信服务的
+function sendMsgApi(data) {
+    return $axios({
+        'url': '/user/sendMsg',
+        'method': 'post',
+        data
+    })
+}
+  
 function loginoutApi() {
   return $axios({
     'url': '/user/loginout',
