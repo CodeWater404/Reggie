@@ -29,6 +29,25 @@ public class LoginCheckFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
+//        todo 测试从session中获取数据，打印出来
+////        test
+//        //获取session
+//        HttpSession session   =   request.getSession();
+//// 获取session中所有的键值
+//        Enumeration<?> enumeration = session.getAttributeNames();
+//// 遍历enumeration
+//        while (enumeration.hasMoreElements()) {
+//            // 获取session的属性名称
+//            String name = enumeration.nextElement().toString();
+//            // 根据键值取session中的值
+//            Object value = session.getAttribute(name);
+//            // 打印结果
+//            System.out.println("name:" + name + ",value:" + value );
+//        }
+        
+        
+        
+        
 //        1、获取本次请求的URI
         String requestURI = request.getRequestURI();
         log.info( "拦截到请求：{}" , requestURI );
@@ -52,7 +71,7 @@ public class LoginCheckFilter implements Filter {
             // 放行之后，直接结束即可
             return ;
         }
-//        4-1.判断登录状态，如果已登录，则直接放行
+//        4-1.employee：判断登录状态，如果已登录，则直接放行
         if( request.getSession().getAttribute( "employee" ) != null ){
             log.info( "用户已登录，用户id为{}" , request.getSession().getAttribute( "employee" ) );
             
@@ -84,8 +103,13 @@ public class LoginCheckFilter implements Filter {
         return;
         
     }
-    
-    //路径匹配，检查本次请求是否需要放行
+
+    /**
+     * 路径匹配，检查本次请求是否需要放行
+     * @param urls
+     * @param requestURI
+     * @return
+     */
     public boolean check( String[] urls , String requestURI ){
         for( String url : urls ){
             boolean match = PATH_MATCHER.match( url , requestURI );

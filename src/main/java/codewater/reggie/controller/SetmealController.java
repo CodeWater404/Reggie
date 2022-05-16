@@ -116,4 +116,22 @@ public class SetmealController {
         
         return R.success( "套餐数据删除成功" );
     }
+
+    /**
+     * 根据条件查询套餐数据： 这里主要是用于手机端展示套餐数据的
+     * PS: 前端键值对传过来的数据，直接写对应的数据类型即可，如果是json需要@RequestBody
+     * @param setmeal
+     * @return
+     */
+    @GetMapping("/list")
+    public R<List<Setmeal>> list(  Setmeal setmeal ){
+        LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq( setmeal.getCategoryId() != null , Setmeal::getCategoryId , setmeal.getCategoryId() );
+        queryWrapper.eq( setmeal.getStatus() != null , Setmeal::getStatus , setmeal.getStatus() );
+        queryWrapper.orderByDesc( Setmeal::getUpdateTime );
+        
+        List<Setmeal> list = setmealService.list( queryWrapper );
+        
+        return R.success( list );
+    }
 }

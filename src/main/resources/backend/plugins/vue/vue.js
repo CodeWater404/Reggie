@@ -11248,6 +11248,7 @@
     // disconnected due to the intermediate scope variable)
     // #9438, #9506
     // TODO: this can be further optimized by properly analyzing in-scope bindings
+    // 这可以通过正确分析范围内绑定来进一步优化
     // and skip force updating ones that do not actually use scope variables.
     if (!needsForceUpdate) {
       var parent = el.parent;
