@@ -12,6 +12,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,9 +42,11 @@ public class SetmealController {
      * 新增套餐: @RequestBody是接受来自请求体的数据
      *        而@RequestParam是接受来自请求头的数据
      * @param setmealDto
+     * @CacheEvict 清除缓存 ，第一个表示缓存的键 ， 第二个表示清除所有
      * @return
      */
     @PostMapping()
+    @CacheEvict( value = "setmealCache" , allEntries = true )
     public R<String> save( @RequestBody SetmealDto setmealDto){
         log.info( "套餐信息：{}" , setmealDto );
         
@@ -106,9 +110,11 @@ public class SetmealController {
      * 删除套餐：@RequestBody是接受来自请求体的数据
      *        而@RequestParam是接受来自请求头的数据
      * @param ids
+     * @CacheEvict 清除缓存 ，第一个表示缓存的键 ， 第二个表示清除所有
      * @return
      */
     @DeleteMapping
+    @CacheEvict( value = "setmealCache" , allEntries = true )
     public R<String> delete(@RequestParam List<Long> ids ){
         log.info("ids:{}" , ids );
         
@@ -121,9 +127,11 @@ public class SetmealController {
      * 根据条件查询套餐数据： 这里主要是用于手机端展示套餐数据的
      * PS: 前端键值对传过来的数据，直接写对应的数据类型即可，如果是json需要@RequestBody
      * @param setmeal
+     * @Cacheable value在缓存中的键 ， key在缓存中键对应的值
      * @return
      */
     @GetMapping("/list")
+    @Cacheable( value = "setmealCache" , key = "#setmeal.categoryId + '_' + #setmeal.status" )
     public R<List<Setmeal>> list(  Setmeal setmeal ){
         LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq( setmeal.getCategoryId() != null , Setmeal::getCategoryId , setmeal.getCategoryId() );
