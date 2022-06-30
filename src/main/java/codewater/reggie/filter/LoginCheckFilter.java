@@ -60,7 +60,13 @@ public class LoginCheckFilter implements Filter {
           "/front/**" ,
           "/common/**" ,
           "/user/sendMsg" , //移动端发送短信的路径
-          "/user/login"       //移动端登录
+          "/user/login"  ,     //移动端登录
+            // 下面是放行Knife4j框架的路径，这样不用登录就可以进行测试
+            "/doc.html",
+            "/webjars/**",
+            "/swagger-resources",
+            "/v2/api-docs"
+                
         };
 //        2、判断本次请求是否需要处理（检查本次请求是否是登录的）
         boolean check = check( urls , requestURI );

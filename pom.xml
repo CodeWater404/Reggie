@@ -103,6 +103,14 @@
             <version>4.0.0-RC1</version>
         </dependency>
 
+        <!--Swagger 是一个规范且完整的框架，用于生成、描述、调用和可视化 RESTful 风格的 Web 服务。
+        knife4j为mvc继承swagger生成的api文档解决方案.
+        简单来说就是，生成接口文档的-->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>3.0.2</version>
+        </dependency>
     </dependencies>
 
     <build>
